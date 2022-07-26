@@ -58,25 +58,49 @@ south_north_SW_normal = int(south_north_SW / 10)
 west_east_SW_normal = int(west_east_SW / 10)
 
 # %% Figuring out when the fire reached the 
-time_center = np.where(fire_area[:, south_north_centre, west_east_centre] > 0)[0][0]
+
 
 zsf_val_centre = tanphi[:, south_north_centre, west_east_centre]
 zsf_val_NE = tanphi[:, south_north_NE, west_east_NE]
 zsf_val_SW = tanphi[:, south_north_SW, west_east_SW]
 
 # Centre of the hill
+time_center = np.where(fire_area[:, south_north_centre, west_east_centre] > 0)[0][0]
 u_centre = u[time_center, 0, south_north_centre_normal, west_east_centre_normal]
 v_centre = v[time_center, 0, south_north_centre_normal, west_east_centre_normal]
 ws_centre = np.sqrt((u ** 2) + (v ** 2))
 t_centre = t[time_center, 0, south_north_centre_normal, west_east_centre_normal]
 
-#NE part of the hill
 
+#NE part of the hill
+time_NE = np.where(fire_area[:, south_north_NE, west_east_NE] > 0)[0][0]
+u_NE = u[time_NE, 0, south_north_NE_normal, west_east_NE_normal]
+v_NE = v[time_NE, 0, south_north_NE_normal, west_east_NE_normal]
+ws_NE = np.sqrt((u ** 2) + (v ** 2))
+t_NE = t[time_NE, 0, south_north_NE_normal, west_east_NE_normal]
+
+# SW part of the hill
+time_SW = np.where(fire_area[:, south_north_SW, west_east_SW] > 0)[0][0]
+u_SW = u[time_SW, 0, south_north_SW_normal, west_east_SW_normal]
+v_SW = v[time_SW, 0, south_north_SW_normal, west_east_SW_normal]
+ws_SW = np.sqrt((u ** 2) + (v ** 2))
+t_SW = t[time_SW, 0, south_north_SW_normal, west_east_SW_normal]
+
+# DZDXF and DZDYF
 x = df.variables['DZDXF'][:, :, :]
 y = df.variables['DZDYF'][:, :, :]
 
 tanphi = np.sqrt((x ** 2) + (y ** 2))
-print('Tanphi')
-print(tanphi)
+
+# %%
+
+
 print('The time where the fire_area reaches the center of the hill is at', time_center)
 print('the slope of the hill at that time is:', tanphi[time_center, south_north_centre, west_east_centre])
+print('the new tanphi is', tanphi[time_center, south_north_centre, west_east_centre])
+
+
+
+
+
+
