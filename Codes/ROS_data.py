@@ -28,6 +28,8 @@ print('Reading in V from the wrfout file')
 v = wrf.getvar(df, "va", None, units = "m/s")
 t = df.variables['T2'][:, :, :]# %% Assigning locations on the hill
 
+ROS = df.variables['ROS'][:]
+
 # Sub grid
 
 # Centre of the hill
@@ -95,16 +97,19 @@ print('\n')
 print('Center')
 #print('the tanphi is', tanphi[time_center, south_north_centre, west_east_centre])
 print('the Wind Speed is', ws_centre[time_center, 0, south_north_centre_normal, west_east_centre_normal])
+print('The ROS is', ROS[time_center, south_north_centre, west_east_centre])
 print('------------------------------------------\n')
 
 print('NE')
 #print('the tanphi is', tanphi[time_NE, south_north_NE, west_east_NE])
 print('the Wind Speed is', ws_NE[time_NE, 0, south_north_NE_normal, west_east_NE_normal])
+print('The ROS is', ROS[time_NE, south_north_NE, west_east_NE])
 print('------------------------------------------\n')
 
 print('SW')
 #print('the tanphi is', tanphi[time_SW, south_north_SW, west_east_SW])
 print('the Wind Speed is', ws_SW[time_SW, 0, south_north_SW_normal, west_east_SW_normal])
+print('The ROS is', ROS[time_SW, south_north_SW, west_east_SW])
 print('------------------------------------------\n')
 
 
