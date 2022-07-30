@@ -53,15 +53,13 @@ w_no_fire = wrf.getvar(fire_atms_0, "wa", None, units="m/s")
 
 # Calculating fire winds
 print('calculating fire winds')
-
 ws_no_fire = np.sqrt((u_no_fire ** 2) + (v_no_fire ** 2))
-
 ws_fire = np.sqrt((u_fire ** 2) + (v_fire ** 2))
+fire_wind = abs(ws_fire - ws_no_fire)
 
 print('W component of fire winds')
 w_fire_wind = (w_fire - w_no_fire)
-print('Fire Winds')
-fire_wind = abs(ws_fire - ws_no_fire)
+
 # REMOVE LATER
 fire_wind *= 100  # Remove this later as this is just for testing
 
@@ -96,7 +94,6 @@ time = fire_atms_1.variables['XTIME'][:]
 # %% Plot 1
 ref = 100  # this is the refinement number. Change this for wind only.
 print('Creating the first plot')
-clim = [-abs(fire_p[:]).max(), abs(fire_p[:]).max()]
 levels = np.linspace(-abs(fire_p[:]).max(), abs(fire_p[:]).max(), 101)
 fig = plt.figure(figsize=(10, 8), dpi=200)
 for i in range(-1, 180):
