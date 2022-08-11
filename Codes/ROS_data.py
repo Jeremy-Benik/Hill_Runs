@@ -13,7 +13,7 @@ import numpy as np
 import glob
 import wrf
 # %% Reading in the file (just one for now) and variables
-df = nc.Dataset('/Users/jeremybenik/Research_files/hill_run/cheyenne_runs/run_21/wrfout_d01_0001-01-01_00:00:00')
+df = nc.Dataset('/Users/jeremybenik/Research_files/hill_run/cheyenne_runs/run_2/wrfout_d01_0001-01-01_00:00:00')
 
 # Reading in fire_area
 fire_area = df.variables['FIRE_AREA'][:, :, :]
