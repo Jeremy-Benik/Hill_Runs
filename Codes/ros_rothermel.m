@@ -1,4 +1,4 @@
-function ros=fire_ros(fuel,speed,tanphi,fmc_g)
+function ros=fire_ros(fuel,speed,tanphi,fmc_g, adjr0, adjrw, adjrs)
 % ros=fire_ros(fuel,speed,tanphi)
 % ros=fire_ros(fuel,speed,tanphi,fmc_g)
 % in
@@ -30,9 +30,9 @@ cmbcnst=fuel.cmbcnst;             % JOULES PER KG OF DRY FUEL
 fuelheat=fuel.fuelheat;           % FUEL PARTICLE LOW HEAT CONTENT, BTU/LB
 fuelmc_g=fuel.fuelmc_g;           % FUEL PARTICLE (SURFACE) MOISTURE CONTENT, jm: 1 by weight?
 fuelmc_c=fuel.fuelmc_c;           % FUEL PARTICLE (CANOPY) MOISTURE CONTENT, 1
-fuel_adjr0 = fuel.adjr0;
-fuel_adjw = fuel.adjrw;
-fuel_adjs = fuel.adjrs;
+fuel_adjr0 = adjr0;
+fuel_adjw = adjrw;
+fuel_adjs = adjrs;
 if exist('fmc_g','var') % override moisture content by given
     fuelmc_g = fmc_g;
 end
@@ -82,12 +82,15 @@ if ~ichap,
     %  eqn.: phiw = c * umid**bbb * (betafl/betaop)**(-e) ! wind coef
     phiw = umid^bbb * phiwc                  % wind coef
     phis = 5.275 * betafl^(-0.3) *max(0,tanphi)^2  % slope factor
+    disp('---------------------')
+    disp('Adjustment Factors')
     disp(fuel_adjr0)
     disp(fuel_adjw)
     disp(fuel_adjs)
     %ros = r_0*(1. + phiw + phis)  * .00508; % spread rate, m/s
-    ros = (r_0 * .00508 * fuel_adjr0) + ((r_0 * phiw * fuel_adjw) * .00508) + ((r_0 * phis * fuel_adjs) * .00508)
-    %ros = (r_0 * fuel_adjr0) + (r_0 * (phiw * fuel_adjw)) + (r_0 * (phis * fuel_adjs))
+    ros = ((r_0 *  fuel_adjr0) + ((r_0 * phiw * fuel_adjw)) + ((r_0 * phis * fuel_adjs))) * .00508
+    %ros = (r_0 * fuel_adjr0) + ((r_0 * phiw * fuel_adjw)) + ((r_0 * phis * fuel_adjs))
+
     % Multiply the vars by the adjustment factors before I put in in the
     % code
 else  % chapparal
@@ -95,5 +98,5 @@ else  % chapparal
     spdms = max(speed,0.);
     ros = max(.03333,1.2974 * spdms^1.41);       % spread rate, m/s
 end
-ros=min(ros,6);
+ros=ros;
 end
