@@ -70,7 +70,7 @@ irm      = ir * 1055./( 0.3048^2 * 60.) * 1.e-6;% for mw/m^2 (set but not used)
 xifr     = exp( (0.792 + 0.681*savr^0.5)...
             * (betafl+0.1)) /(192. + 0.2595*savr); % propagating flux ratio
 %        ... r_0 is the spread rate for a fire on flat ground with no wind.
-r_0      = ir*xifr/(rhob * epsilon *qig) * adjr0 % default spread rate in ft/min
+r_0      = ir*xifr/(rhob * epsilon *qig) * adjr0; % default spread rate in ft/min
 
 % computations from CAWFE code: wf2_janice/fire_ros.m4 
 
@@ -88,6 +88,13 @@ if ~ichap,
 
     % Multiply the vars by the adjustment factors before I put in in the
     % code
+    disp('----------------------------------------------------------------------')
+    disp('Speed')
+    disp(speed)
+    disp('Tanphi')
+    disp(tanphi)
+    disp('r_0')
+    disp(r_0)
 else  % chapparal
     %        .... spread rate has no dependency on fuel character, only windspeed.
     spdms = max(speed,0.);
