@@ -30,9 +30,9 @@ cmbcnst=fuel.cmbcnst;             % JOULES PER KG OF DRY FUEL
 fuelheat=fuel.fuelheat;           % FUEL PARTICLE LOW HEAT CONTENT, BTU/LB
 fuelmc_g=fuel.fuelmc_g;           % FUEL PARTICLE (SURFACE) MOISTURE CONTENT, jm: 1 by weight?
 fuelmc_c=fuel.fuelmc_c;           % FUEL PARTICLE (CANOPY) MOISTURE CONTENT, 1
-fuel_adjr0 = adjr0;
-fuel_adjw = adjrw;
-fuel_adjs = adjrs;
+speed = speed * adjrw;
+tanphi = tanphi * adjrs;
+
 if exist('fmc_g','var') % override moisture content by given
     fuelmc_g = fmc_g;
 end
@@ -70,7 +70,7 @@ irm      = ir * 1055./( 0.3048^2 * 60.) * 1.e-6;% for mw/m^2 (set but not used)
 xifr     = exp( (0.792 + 0.681*savr^0.5)...
             * (betafl+0.1)) /(192. + 0.2595*savr); % propagating flux ratio
 %        ... r_0 is the spread rate for a fire on flat ground with no wind.
-r_0      = ir*xifr/(rhob * epsilon *qig)  % default spread rate in ft/min
+r_0      = ir*xifr/(rhob * epsilon *qig) * adjr0 % default spread rate in ft/min
 
 % computations from CAWFE code: wf2_janice/fire_ros.m4 
 
@@ -80,15 +80,10 @@ if ~ichap,
     umidm = min(spdms,30.);                    % max input wind spd is 30 m/s   !param!
     umid = umidm * 196.850;                    % m/s to ft/min
     %  eqn.: phiw = c * umid**bbb * (betafl/betaop)**(-e) ! wind coef
-    phiw = umid^bbb * phiwc                  % wind coef
-    phis = 5.275 * betafl^(-0.3) *max(0,tanphi)^2  % slope factor
-    disp('---------------------')
-    disp('Adjustment Factors')
-    disp(fuel_adjr0)
-    disp(fuel_adjw)
-    disp(fuel_adjs)
-    %ros = r_0*(1. + phiw + phis)  * .00508; % spread rate, m/s
-    ros = ((r_0 *  fuel_adjr0) + ((r_0 * phiw * fuel_adjw)) + ((r_0 * phis * fuel_adjs))) * .00508
+    phiw = umid^bbb * phiwc;                  % wind coef
+    phis = 5.275 * betafl^(-0.3) *max(0,tanphi)^2;  % slope factor
+    ros = r_0 * (1. + phiw + phis) * .00508; % spread rate, m/s
+    %ros = ((r_0 *  fuel_adjr0) + ((r_0 * phiw * fuel_adjw)) + ((r_0 * phis * fuel_adjs))) * .00508
     %ros = (r_0 * fuel_adjr0) + ((r_0 * phiw * fuel_adjw)) + ((r_0 * phis * fuel_adjs))
 
     % Multiply the vars by the adjustment factors before I put in in the
