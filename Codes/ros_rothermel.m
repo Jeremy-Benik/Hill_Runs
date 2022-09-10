@@ -70,7 +70,7 @@ irm      = ir * 1055./( 0.3048^2 * 60.) * 1.e-6;% for mw/m^2 (set but not used)
 xifr     = exp( (0.792 + 0.681*savr^0.5)...
     * (betafl+0.1)) /(192. + 0.2595*savr); % propagating flux ratio
 %        ... r_0 is the spread rate for a fire on flat ground with no wind.
-r_0      = ir*xifr/(rhob * epsilon *qig) % default spread rate in ft/min
+r_0      = ir*xifr/(rhob * epsilon *qig); % default spread rate in ft/min
 
 % computations from CAWFE code: wf2_janice/fire_ros.m4
 
@@ -83,20 +83,11 @@ if ~ichap
     phiw = umid^bbb * phiwc;                  % wind coef
     phis = 5.275 * betafl^(-0.3) *max(0,tanphi)^2;  % slope factor
     %ros = r_0 * (1. + phiw + phis) * .00508; % spread rate, m/s
-    ros = ((r_0 *  adjr0) + ((r_0 * phiw * adjrw)) + ((r_0 * phis * adjrs))) * .00508
+    ros = ((r_0 *  adjr0) + ((r_0 * phiw * adjrw)) + ((r_0 * phis * adjrs))) * .00508;
     %ros = r_0 + ((r_0 * phiw * fuel_adjw)) + ((r_0 * phis * fuel_adjs))
 
     % Multiply the vars by the adjustment factors before I put in in the
     % code
-    disp('----------------------------------------------------------------------')
-    disp('Speed')
-    disp(speed)
-    disp('Tanphi')
-    disp(tanphi)
-    disp('r_0')
-    disp(r_0)
-    disp('ROS')
-    disp(ros)
 else  % chapparal
     %        .... spread rate has no dependency on fuel character, only windspeed.
     spdms = max(speed,0.);
